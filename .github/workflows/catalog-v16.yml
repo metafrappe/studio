@@ -1,0 +1,76 @@
+name: Approved app catalog on Frappe v16
+on:
+  push:
+    branches: [catalog-v16-validation]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0, 1, 2, 3]
+    services:
+      mariadb:
+        image: mariadb:10.6.25
+        env:
+          MARIADB_ROOT_PASSWORD: ci_root
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mariadb-admin ping" --health-interval=5s
+          --health-timeout=2s --health-retries=12
+    env:
+      CI: "true"
+      CYPRESS_INSTALL_BINARY: "0"
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y redis-server mariadb-client libmariadb-dev libcups2-dev libmagic1 ffmpeg
+          python -m pip install frappe-bench uv
+          npm install --global yarn@1.22.22
+      - name: Resolve the shared bench dependencies
+        run: |
+          uv pip compile .github/catalog/requirements.in --python-version 3.14 -o "$RUNNER_TEMP/catalog-constraints.txt"
+          printf '\nfrappe==16.33.1\nerpnext==16.34.2\nhrms==16.18.1\n' >> "$RUNNER_TEMP/catalog-constraints.txt"
+      - name: Prepare the deployed Frappe and ERPNext versions
+        run: |
+          bench init --skip-assets --frappe-branch v16.33.1 --python "$(command -v python)" "$RUNNER_TEMP/frappe-bench"
+          cd "$RUNNER_TEMP/frappe-bench"
+          bench get-app --skip-assets --branch v16.34.2 https://github.com/frappe/erpnext.git
+          bench get-app --skip-assets --branch v16.18.1 https://github.com/frappe/hrms.git
+          bench get-app --skip-assets --branch version-16 https://github.com/frappe/payments.git
+          git -C apps/payments fetch --depth 1 https://github.com/frappe/payments.git cca07d9f9392e2ea0e521c5975151db9e4b6c321
+          git -C apps/payments checkout cca07d9f9392e2ea0e521c5975151db9e4b6c321
+          test "$(git -C apps/frappe rev-parse HEAD)" = 988e54f3c4c291e2077a83809663f123731abe76
+          test "$(git -C apps/erpnext rev-parse HEAD)" = 4048fb70e14d1843956fcdabb7c3cca75a1cbcdd
+          test "$(git -C apps/hrms rev-parse HEAD)" = a4768b441cff346def505e27f2a2229ee1e05b9b
+          redis-server config/redis_cache.conf --daemonize yes
+          redis-server config/redis_queue.conf --daemonize yes
+          cp "$GITHUB_WORKSPACE/.github/catalog/smoke.py" apps/frappe/frappe/_catalog_smoke.py
+          mariadb --host 127.0.0.1 --port 3306 -u root -pci_root -e "SET GLOBAL character_set_server = 'utf8mb4'; SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+      - name: Install each candidate on a separate disposable site
+        env:
+          UV_CONSTRAINT: ${{ runner.temp }}/catalog-constraints.txt
+          PIP_CONSTRAINT: ${{ runner.temp }}/catalog-constraints.txt
+        run: python .github/catalog/validate.py ${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: catalog-results-${{ matrix.shard }}
+          path: catalog-results/
