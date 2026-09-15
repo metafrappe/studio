@@ -1,7 +1,7 @@
 name: Approved app catalog on Frappe v16
 on:
   push:
-    branches: [catalog-v16-validation]
+    branches: [catalog-posawesome-v16]
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        shard: [0, 1, 2, 3]
+        shard: [0]
     services:
       mariadb:
         image: mariadb:10.6.25
