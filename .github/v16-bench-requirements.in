@@ -172,3 +172,11 @@ pycrdt==0.12.26
 Markdown>=3.5.1,<4
 beautifulsoup4~=4.13.4
 html2text==2025.4.15
+
+# frappe/builder master (shared environment compatibility)
+jsmin>=3.0.1
+csscompressor>=0.9.5
+pandas>=2.3.2,<3
+duckdb==1.4.3
+litellm==1.95.0
+json-repair>=0.30

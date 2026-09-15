@@ -7,8 +7,9 @@ Studio remains early-development software. This fork does not change that status
 ## Compatibility change
 
 LiteLLM 1.83.7 requires Click 8.1.8, which conflicts with the deployed Frappe
-16.33.1 requirement Click 8.4.x. LiteLLM 1.101.0 permits Click 8.x. CI resolves
-the combined requirements of Metaframer's existing 19 apps plus Drive and Studio.
+16.33.1 requirement Click 8.4.x. LiteLLM 1.95.0 permits Click 8.x and matches
+Frappe Builder's requirement. CI resolves the combined requirements of
+Metaframer's existing 19 apps plus Drive, Studio and Builder.
 
 The branch targets Frappe 16 and Python 3.14. CI uses the deployed Frappe
 revision, Node 24 and MariaDB 10.6.25. It checks fresh installation, migration,
