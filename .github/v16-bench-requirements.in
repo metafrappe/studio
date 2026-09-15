@@ -1,0 +1,174 @@
+# Metaframer bench-0022 dependency snapshot, 2026-09-16.
+# Frappe 16.33.1 (988e54f), ERPNext 16.34.2 (4048fb7), URY e2696a9.
+# Captured from the 19 deployed app manifests. Refresh deliberately with app upgrades.
+# frappe
+Babel~=2.16.0
+Click~=8.4.1
+filelock~=3.20.1
+filetype~=1.2.0
+GitPython~=3.1.45
+Jinja2~=3.1.6
+Pillow~=12.3.0
+PyJWT~=2.13.0
+duckdb~=1.4.3
+pyarrow~=25.0.0
+PyMySQL==1.1.2
+pypdf==6.15.0
+PyPika @ git+https://github.com/frappe/pypika@2c50e6142b2d61d2d243e466fdd5dc03b3d918f2
+mysqlclient==2.2.7
+PyQRCode~=1.2.1
+PyYAML~=6.0.3
+RestrictedPython~=8.1
+WeasyPrint==68.0
+pydyf==0.12.1
+Werkzeug==3.1.6
+Whoosh~=2.7.4
+beautifulsoup4~=4.13.5
+bleach-allowlist~=1.0.3
+chardet~=5.2.0
+croniter~=6.0.0
+cryptography~=50.0.0
+cssutils~=2.11.1
+distro~=1.9.0
+email-reply-parser~=0.5.12
+gunicorn @ git+https://github.com/frappe/gunicorn@54b59ca884c79dcf04d4882658a32bbaf17e999f
+html5lib~=1.1
+ipython~=8.37.0
+ldap3~=2.9.1
+markdown2~=2.5.4
+MarkupSafe~=3.0.3
+nh3~=0.3.2
+num2words~=0.5.14
+oauthlib~=3.3.1
+openpyxl~=3.1.5
+xlsxwriter~=3.2.9
+orjson~=3.11.5
+passlib~=1.7.4
+pdfkit~=1.0.0
+phonenumbers~=9.0.23
+premailer~=3.10.0
+psutil~=7.0.0
+psycopg2-binary~=2.9.11
+pyOpenSSL~=26.4.0
+pydantic~=2.12.5
+pyotp~=2.9.0
+python-dateutil~=2.9.0.post0
+pytz==2025.2
+rauth~=0.7.3
+redis~=7.1.0
+hiredis~=3.3.0
+requests-oauthlib~=2.0.0
+requests~=2.33.0
+rq==2.6.1
+rsa~=4.9.1
+semantic-version~=2.10.0
+sentry-sdk~=1.45.1
+sqlparse~=0.6.0
+sql_metadata~=3.0.1
+tenacity~=9.1.2
+terminaltables~=3.1.10
+traceback-with-variables~=2.2.1
+typing_extensions>=4.15.0,<5
+xlrd~=2.0.2
+zxcvbn~=4.5.0
+markdownify~=1.2.2
+google-api-python-client~=2.188.0
+google-auth-oauthlib~=1.2.4
+google-auth~=2.48.0
+vobject~=0.9.9
+pycountry~=24.6.1
+websockets~=15.0.1
+# erpnext
+Unidecode~=1.4.0
+barcodenumber~=0.5.0
+rapidfuzz~=3.14.3
+holidays~=0.87
+googlemaps~=4.10.0
+plaid-python~=7.2.1
+python-youtube~=0.9.9
+pypng~=0.20220715.0
+mt-940>=4.26.0
+pdfplumber>=0.11.0
+# payments
+paytmchecksum~=1.7.0
+razorpay~=2.0.0
+stripe~=10.12.0
+braintree~=4.20.0
+pycryptodome>=3.18.0,<4.0.0
+gocardless-pro~=1.22.0
+setuptools==80.9.0
+# hrms
+# healthcare
+responses==0.23.1
+python-barcode~=0.15.1
+# lending
+# erpnext_shipping
+# frappe_appointment
+ics~=0.7.2
+tatsu==5.16.0
+# insights
+pandas~=2.3.3
+SQLAlchemy==2.0.41
+python-telegram-bot==21.4
+duckdb~=1.4.3
+sqlglot>=30.12.0,<30.18
+ibis-framework~=11.0.0
+ibis-framework[duckdb]
+ibis-framework[mysql]
+ibis-framework[sqlite]
+ibis-framework[clickhouse]
+ibis-framework[postgres]
+psycopg[binary]
+# wiki
+markdown-it-py>=3.0
+mdit-py-plugins>=0.4
+# crm
+twilio==8.5.0
+# telephony
+twilio==8.5.0
+bleach~=6.3.0
+# helpdesk
+textblob==0.18.0.post0
+# gameplan
+# raven
+linkpreview~=0.9.0
+openai>=2.30.0
+blurhash-python
+openai-agents>=0.17.2
+markitdown
+pandas
+google-cloud-documentai
+# lms
+websocket_client~=1.6.4
+markdown~=3.5.1
+beautifulsoup4>=4.12,<4.14
+lxml~=6.0.2
+cairocffi==1.5.1
+fuzzywuzzy~=0.18.0
+# print_designer
+PyQRCode~=1.2.1
+pypng~=0.20220715.0
+python-barcode~=0.15.1
+websockets
+distro
+# eu_einvoice
+factur-x~=3.1
+drafthorse~=2025.1.0
+saxonche>=12.5.0,<13.0.0
+lxml>=4.9.3,<=6.0.2
+
+# ury
+
+
+# metafrappe/drive version-16
+opencv-python-headless>=4.10.0.84
+python-magic==0.4.27
+mimemapper==0.4.1
+unoconv>=0.9.0
+PyJWT>=2.8.0
+thumbnail>=1.5.0
+boto3~=1.43.29
+pycrdt==0.12.26
+Markdown>=3.5.1,<4
+beautifulsoup4~=4.13.4
+html2text==2025.4.15

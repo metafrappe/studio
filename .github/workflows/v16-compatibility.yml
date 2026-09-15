@@ -1,0 +1,72 @@
+name: Frappe v16 compatibility
+on:
+  push:
+    branches: [version-16]
+  pull_request:
+    branches: [version-16]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: v16-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  install-build-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    services:
+      mariadb:
+        image: mariadb:10.6.25
+        env:
+          MARIADB_ROOT_PASSWORD: ci_root
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mariadb-admin ping" --health-interval=5s
+          --health-timeout=2s --health-retries=12
+    env:
+      CI: "true"
+      CYPRESS_INSTALL_BINARY: "0"
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y redis-server mariadb-client libmariadb-dev libcups2-dev libmagic1 ffmpeg
+          python -m pip install frappe-bench uv
+          npm install --global yarn@1.22.22
+      - name: Resolve dependencies alongside the existing bench apps
+        run: uv pip compile pyproject.toml .github/v16-bench-requirements.in --python-version 3.14 -o "$RUNNER_TEMP/bench-requirements.txt"
+      - name: Create bench at the deployed Frappe revision
+        run: |
+          bench init --skip-assets --frappe-branch v16.33.1 --python "$(command -v python)" "$RUNNER_TEMP/frappe-bench"
+          cd "$RUNNER_TEMP/frappe-bench"
+          test "$(git -C apps/frappe rev-parse HEAD)" = 988e54f3c4c291e2077a83809663f123731abe76
+          bench get-app --skip-assets studio "$GITHUB_WORKSPACE"
+          bench pip install 'markdown~=3.5.1'
+          bench pip check
+          redis-server config/redis_cache.conf --daemonize yes
+          redis-server config/redis_queue.conf --daemonize yes
+      - name: Install and migrate a disposable site
+        run: |
+          cd "$RUNNER_TEMP/frappe-bench"
+          mariadb --host 127.0.0.1 --port 3306 -u root -pci_root -e "SET GLOBAL character_set_server = 'utf8mb4'; SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+          bench new-site test_studio --db-host 127.0.0.1 --db-port 3306 --db-root-username root --db-root-password ci_root --mariadb-user-host-login-scope '%' --admin-password ci_admin
+          bench --site test_studio set-config allow_tests true
+          bench --site test_studio install-app studio
+          bench --site test_studio migrate
+          bench --site test_studio list-apps
+      - name: Build production assets
+        run: |
+          cd "$RUNNER_TEMP/frappe-bench"
+          bench build --app studio
+      - name: Exercise real app workflows
+        run: |
+          cd "$RUNNER_TEMP/frappe-bench"
+          bench --site test_studio execute studio.tests.v16_smoke.run

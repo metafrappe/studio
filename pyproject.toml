@@ -4,12 +4,12 @@ authors = [
     { name = "Frappe Technologies Pvt Ltd", email = "rucha@frappe.io"}
 ]
 description = "Low-code app builder for Frappe Framework"
-requires-python = ">=3.10"
+requires-python = ">=3.14,<3.15"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe~=15.0.0" # Installed and managed by bench.
-    "litellm==1.83.7",
+    "litellm==1.101.0",
     "json_repair>=0.59.10",
 ]
 
@@ -23,7 +23,7 @@ build-backend = "flit_core.buildapi"
 watchdog = "~=6.0.0"
 
 [tool.bench.frappe-dependencies]
-frappe = ">=15.0.0,<=17.0.0-dev"
+frappe = ">=16.0.0,<17.0.0"
 
 [tool.ruff]
 line-length = 110
