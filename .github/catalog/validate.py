@@ -39,6 +39,9 @@ def validate(candidate):
             run(["bench", "new-site", site, "--db-host", "127.0.0.1", "--db-port", "3306",
                  "--db-root-username", "root", "--db-root-password", "ci_root",
                  "--mariadb-user-host-login-scope", "%", "--admin-password", "ci_admin"], log)
+            run(["bench", "--site", site, "set-config", "allow_tests", "true", "--parse"], log)
+            if app == "nextassist":
+                run(["bench", "--site", site, "set-config", "nextassist_pg", json.dumps({"host":"127.0.0.1","port":5432,"database":"nextassist","user":"nextassist","password":"ci_pg"}), "--parse"], log)
             for dependency in ["erpnext", "payments", "hrms", app]:
                 run(["bench", "--site", site, "install-app", dependency], log)
             result["stage"] = "migrate"
@@ -48,6 +51,11 @@ def validate(candidate):
             result["stage"] = "doctype-controller-imports"
             run(["bench", "--site", site, "execute", "frappe._catalog_smoke.run",
                  "--kwargs", json.dumps({"app": app})], log)
+            result["stage"] = "upstream-regressions"
+            for module in candidate.get("test_modules", []):
+                run(["bench", "--site", site, "run-tests", "--module", module], log)
+            result["stage"] = "focused-regressions"
+            run(["bench", "--site", site, "execute", app + ".tests.v16_smoke.run", "--kwargs", json.dumps({"app": app})], log)
             run(["bench", "--site", site, "list-apps"], log)
             result.update(status="passed", stage="complete")
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:

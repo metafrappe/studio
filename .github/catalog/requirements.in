@@ -294,3 +294,66 @@ validator==0.7.1
 
 # frappe/meet @ 2de834b978a1aa4b47c3db0f1c2659025388c7b5
 
+
+# metafrappe/ecommerce_integrations version-16
+ShopifyAPI==12.7.0
+boto3~=1.43.29
+
+# metafrappe/doppio version-16
+Click~=8.4.1
+
+# metafrappe/suite version-16
+av>=12.0.0
+mimemapper==0.4.1
+pymupdf>=1.24.0
+boto3~=1.43.29
+pycrdt==0.12.26
+lxml~=6.0.2
+PyJWT>=2.8.0
+Markdown~=3.5.1
+beautifulsoup4>=4.13.5,<5
+lmdb~=1.7.1
+wrapt~=1.17.3
+msgpack~=1.2.1
+isodate~=0.7.2
+tantivy~=0.26.0
+icalendar~=6.1.0
+pydenticon~=0.3.1
+anthropic>=0.40
+
+# metafrappe/flow_client version-16
+litellm==1.95.0
+lancedb<1,>=0.33
+python-docx<2,>=1.1
+pdfplumber<1,>=0.11
+rapidocr<4,>=3
+onnxruntime<2,>=1.27
+
+# metafrappe/erpnext_expenses version-16
+
+
+# metafrappe/erpnext_pdf-on-submit version-16
+beautifulsoup4~=4.13.5
+
+# metafrappe/frappe-attachments-s3 version-16
+python-magic==0.4.27
+boto3~=1.43.29
+
+# metafrappe/frappe-attachments-s3 version-16-improwised
+python-magic==0.4.27
+boto3~=1.43.29
+
+# metafrappe/frappe-oidc-extended version-16
+PyJWT~=2.13.0
+requests~=2.33.0
+
+# metafrappe/nextassist version-16
+openai>=1.100.2
+anthropic>=0.30.0
+google-genai>=1.0.0
+pypdf>=3.0.0
+psycopg2-binary>=2.9.0
+claude-agent-sdk==0.2.153
+
+# CI only
+moto[s3]==5.2.3

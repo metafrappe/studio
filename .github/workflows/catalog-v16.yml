@@ -1,7 +1,7 @@
-name: Approved app catalog on Frappe v16
+name: Metafrappe v16 fork compatibility
 on:
   push:
-    branches: [catalog-v16-validation]
+    branches: [catalog-v16-ports]
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,6 +26,16 @@ jobs:
         options: >-
           --health-cmd="mariadb-admin ping" --health-interval=5s
           --health-timeout=2s --health-retries=12
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nextassist
+          POSTGRES_PASSWORD: ci_pg
+          POSTGRES_DB: nextassist
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U nextassist" --health-interval=5s
+          --health-timeout=2s --health-retries=12
     env:
       CI: "true"
       CYPRESS_INSTALL_BINARY: "0"
@@ -37,11 +47,11 @@ jobs:
           python-version: "3.14"
       - uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: "24.20.0"
       - name: Install build prerequisites
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y redis-server mariadb-client libmariadb-dev libcups2-dev libmagic1 ffmpeg
+          sudo apt-get install -y redis-server mariadb-client libmariadb-dev libcups2-dev libmagic1 ffmpeg libgl1 libglib2.0-0
           python -m pip install frappe-bench uv
           npm install --global yarn@1.22.22
       - name: Resolve the shared bench dependencies
@@ -49,6 +59,9 @@ jobs:
           uv pip compile .github/catalog/requirements.in --python-version 3.14 -o "$RUNNER_TEMP/catalog-constraints.txt"
           printf '\nfrappe==16.33.1\nerpnext==16.34.2\nhrms==16.18.1\n' >> "$RUNNER_TEMP/catalog-constraints.txt"
       - name: Prepare the deployed Frappe and ERPNext versions
+        env:
+          UV_CONSTRAINT: ${{ runner.temp }}/catalog-constraints.txt
+          PIP_CONSTRAINT: ${{ runner.temp }}/catalog-constraints.txt
         run: |
           bench init --skip-assets --frappe-branch v16.33.1 --python "$(command -v python)" "$RUNNER_TEMP/frappe-bench"
           cd "$RUNNER_TEMP/frappe-bench"
@@ -60,6 +73,7 @@ jobs:
           test "$(git -C apps/frappe rev-parse HEAD)" = 988e54f3c4c291e2077a83809663f123731abe76
           test "$(git -C apps/erpnext rev-parse HEAD)" = 4048fb70e14d1843956fcdabb7c3cca75a1cbcdd
           test "$(git -C apps/hrms rev-parse HEAD)" = a4768b441cff346def505e27f2a2229ee1e05b9b
+          bench pip install "moto[s3]==5.2.3"
           redis-server config/redis_cache.conf --daemonize yes
           redis-server config/redis_queue.conf --daemonize yes
           cp "$GITHUB_WORKSPACE/.github/catalog/smoke.py" apps/frappe/frappe/_catalog_smoke.py
