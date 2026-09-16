@@ -60,6 +60,8 @@ def validate(candidate):
             result.update(status="passed", stage="complete")
         except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
             result.update(status="failed", error=str(error))
+            log.flush()
+            print("\n".join((OUTPUT / (app + ".log")).read_text().splitlines()[-70:]), flush=True)
         finally:
             (BENCH / "sites/apps.txt").write_text("frappe\nerpnext\nhrms\npayments\n")
             subprocess.run(["uv", "pip", "uninstall", "--python", str(BENCH / "env/bin/python"), app],

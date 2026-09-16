@@ -25,8 +25,8 @@
     "test_modules": [
       "suite.suite_drive.webdav.tests.test_xmlutil"
     ],
-    "validated_sha": "77670423373a369ac832aa6d7b1e6aab56dec808",
-    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
+    "validated_sha": "c687e0e4f75db0573f0b33ef6e6a7dcf76375468",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35068856285"
   },
   {
     "repo": "metafrappe/flow_client",
@@ -42,7 +42,7 @@
   {
     "repo": "metafrappe/erpnext_expenses",
     "branch": "version-16",
-    "sha": "7abeacedcceccd4d374a20cf0a1005b6f368e2d4",
+    "sha": "64cf4d2f1b3f254d2de764de43e6966a5a760ac7",
     "app": "expenses",
     "test_modules": []
   },
@@ -61,8 +61,8 @@
     "sha": "5ccac8c384335dacedf01cb580d1a264c427245e",
     "app": "frappe_s3_attachment",
     "test_modules": [],
-    "validated_sha": "2eae63a224654a9a51ed664b4a0b1cc06432406d",
-    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
+    "validated_sha": "5ccac8c384335dacedf01cb580d1a264c427245e",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35068856285"
   },
   {
     "repo": "metafrappe/frappe-attachments-s3",
@@ -70,8 +70,8 @@
     "sha": "260c5841da5689116fe6fb664ae9b2f5682bab2a",
     "app": "frappe_s3_improwised",
     "test_modules": [],
-    "validated_sha": "579d0a861cb22ab996ee0dffac85771349f8c81f",
-    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
+    "validated_sha": "260c5841da5689116fe6fb664ae9b2f5682bab2a",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35068856285"
   },
   {
     "repo": "metafrappe/frappe-oidc-extended",
@@ -79,14 +79,16 @@
     "sha": "8815706eb236c6257c7f4fa1a0fe8c53a4a07e69",
     "app": "oidc_extended",
     "test_modules": [],
-    "validated_sha": "89901d0d4406d1981301b2670c3b6d94e5e0c574",
-    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
+    "validated_sha": "8815706eb236c6257c7f4fa1a0fe8c53a4a07e69",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35068856285"
   },
   {
     "repo": "metafrappe/nextassist",
     "branch": "version-16",
     "sha": "83e7692dc15b0f300a17bf4d466be7e49613e2b4",
     "app": "nextassist",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "83e7692dc15b0f300a17bf4d466be7e49613e2b4",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35068856285"
   }
 ]

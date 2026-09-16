@@ -9,14 +9,32 @@ concurrency:
   group: catalog-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      shards: ${{ steps.shards.outputs.shards }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: shards
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          candidates = json.loads(Path('.github/catalog/candidates.json').read_text())
+          pending = [row for row in candidates if not row.get('deferred') and row.get('validated_sha') != row['sha']]
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('shards=' + json.dumps(list(range(min(4, len(pending))))) + '\n')
+          PY
   validate:
+    needs: plan
+    if: needs.plan.outputs.shards != '[]'
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        shard: [0, 1, 2, 3]
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
     services:
       mariadb:
         image: mariadb:10.6.25
