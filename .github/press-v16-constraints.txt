@@ -1,0 +1,7 @@
+# Direct URL requirements from Frappe 16.33.1 (988e54f3c4c291e2077a83809663f123731abe76).
+# Legacy apps may require the already installed frappe package. uv then needs its
+# transitive Git sources declared explicitly. These constraints keep the exact
+# upstream commits; they do not add packages or relax version requirements.
+# Review this file whenever the deployed Frappe commit changes.
+PyPika @ git+https://github.com/frappe/pypika@2c50e6142b2d61d2d243e466fdd5dc03b3d918f2
+gunicorn @ git+https://github.com/frappe/gunicorn@54b59ca884c79dcf04d4882658a32bbaf17e999f
