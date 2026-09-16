@@ -7,6 +7,6 @@
   "payments_processor": {
     "repo": "metafrappe/payments-processor",
     "branch": "version-16",
-    "sha": "e2b650b1cbd08b50675336e2c04ffd546abd979b"
+    "sha": "507d3fb85fe808d21056820d089e35c885cb65cc"
   }
 }
