@@ -39,7 +39,7 @@ def validate(candidate):
             run(["bench", "new-site", site, "--db-host", "127.0.0.1", "--db-port", "3306",
                  "--db-root-username", "root", "--db-root-password", "ci_root",
                  "--mariadb-user-host-login-scope", "%", "--admin-password", "ci_admin"], log)
-            run(["bench", "--site", site, "set-config", "allow_tests", "true", "--parse"], log)
+            run(["bench", "--site", site, "set-config", "allow_tests", "True", "--parse"], log)
             if app == "nextassist":
                 run(["bench", "--site", site, "set-config", "nextassist_pg", json.dumps({"host":"127.0.0.1","port":5432,"database":"nextassist","user":"nextassist","password":"ci_pg"}), "--parse"], log)
             for dependency in ["erpnext", "payments", "hrms", app]:
