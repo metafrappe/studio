@@ -141,6 +141,7 @@ def main():
         for name, operation in stages:
             result = {"stage": name, "status": "running"}
             results.append(result)
+            print(json.dumps(result), flush=True)
             with (OUTPUT / (name + ".log")).open("w") as log:
                 operation(log)
             result["status"] = "passed"

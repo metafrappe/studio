@@ -2,7 +2,7 @@
   "mail": {
     "repo": "metafrappe/mail",
     "branch": "version-16",
-    "sha": "0f43d635afbe34ceaea803cee3d5cbced1735bd5"
+    "sha": "543d1fbef5d07195cbe413103318f0e004e04641"
   },
   "suite": {
     "repo": "metafrappe/suite",
