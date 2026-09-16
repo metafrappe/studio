@@ -1,0 +1,12 @@
+{
+  "mail": {
+    "repo": "metafrappe/mail",
+    "branch": "version-16",
+    "sha": "0f43d635afbe34ceaea803cee3d5cbced1735bd5"
+  },
+  "suite": {
+    "repo": "metafrappe/suite",
+    "branch": "version-16",
+    "sha": "c687e0e4f75db0573f0b33ef6e6a7dcf76375468"
+  }
+}

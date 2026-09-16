@@ -1,0 +1,82 @@
+name: Metafrappe Mail v16 compatibility
+on:
+  push:
+    branches: [catalog-v16-mail]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: catalog-mail-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  install-build-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    services:
+      mariadb:
+        image: mariadb:10.6.25
+        env:
+          MARIADB_ROOT_PASSWORD: ci_root
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mariadb-admin ping" --health-interval=5s
+          --health-timeout=2s --health-retries=12
+    env:
+      CI: "true"
+      CYPRESS_INSTALL_BINARY: "0"
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14.6"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24.20.0"
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y redis-server mariadb-client libmariadb-dev libcups2-dev libmagic1 ffmpeg libgl1 libglib2.0-0 ansible
+          python -m pip install frappe-bench uv
+          npm install --global yarn@1.22.22
+      - name: Fetch the pinned Mail and Suite sources
+        run: python .github/catalog/mail_validate.py sources
+      - name: Resolve Mail alongside the 54-app dependency snapshot
+        run: |
+          uv pip compile .github/catalog/requirements.in "$RUNNER_TEMP/source_mail/pyproject.toml" "$RUNNER_TEMP/source_suite/pyproject.toml" --python-version 3.14 -o "$RUNNER_TEMP/mail-constraints.txt"
+          printf '\nfrappe==16.33.1\nerpnext==16.34.2\nhrms==16.18.1\n' >> "$RUNNER_TEMP/mail-constraints.txt"
+          cp "$RUNNER_TEMP/mail-constraints.txt" mail-results/constraints.txt
+      - name: Prepare the deployed Frappe and ERPNext versions
+        env:
+          UV_CONSTRAINT: ${{ runner.temp }}/mail-constraints.txt
+          PIP_CONSTRAINT: ${{ runner.temp }}/mail-constraints.txt
+        run: |
+          bench init --skip-assets --frappe-branch v16.33.1 --python "$(command -v python)" "$RUNNER_TEMP/frappe-bench"
+          cd "$RUNNER_TEMP/frappe-bench"
+          bench get-app --skip-assets --branch v16.34.2 https://github.com/frappe/erpnext.git
+          bench get-app --skip-assets --branch v16.18.1 https://github.com/frappe/hrms.git
+          git clone --depth 1 --branch version-16 https://github.com/frappe/payments.git "$RUNNER_TEMP/source_payments"
+          git -C "$RUNNER_TEMP/source_payments" fetch --depth 1 origin cca07d9f9392e2ea0e521c5975151db9e4b6c321
+          git -C "$RUNNER_TEMP/source_payments" checkout --detach cca07d9f9392e2ea0e521c5975151db9e4b6c321
+          bench get-app --skip-assets payments "$RUNNER_TEMP/source_payments"
+          test "$(git -C apps/frappe rev-parse HEAD)" = 988e54f3c4c291e2077a83809663f123731abe76
+          test "$(git -C apps/erpnext rev-parse HEAD)" = 4048fb70e14d1843956fcdabb7c3cca75a1cbcdd
+          test "$(git -C apps/hrms rev-parse HEAD)" = a4768b441cff346def505e27f2a2229ee1e05b9b
+          test "$(git -C apps/payments rev-parse HEAD)" = cca07d9f9392e2ea0e521c5975151db9e4b6c321
+          redis-server config/redis_cache.conf --daemonize yes
+          redis-server config/redis_queue.conf --daemonize yes
+          cp "$GITHUB_WORKSPACE/.github/catalog/smoke.py" apps/frappe/frappe/_catalog_smoke.py
+          mariadb --host 127.0.0.1 --port 3306 -u root -pci_root -e "SET GLOBAL character_set_server = 'utf8mb4'; SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+      - name: Validate Mail and Suite on separate sites in one bench
+        env:
+          UV_CONSTRAINT: ${{ runner.temp }}/mail-constraints.txt
+          PIP_CONSTRAINT: ${{ runner.temp }}/mail-constraints.txt
+        run: python .github/catalog/mail_validate.py validate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mail-v16-results
+          path: |
+            mail-results/
+            ${{ runner.temp }}/frappe-bench/logs/*.log
+          if-no-files-found: warn
