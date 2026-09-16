@@ -136,19 +136,27 @@ def check_controllers(log):
 
 
 def check_workflows(log):
+	failures = []
 	for app in PINS:
-		run(
-			[
-				"bench",
-				"--site",
-				SITE,
-				"execute",
-				app + ".tests.v16_smoke.run",
-				"--kwargs",
-				json.dumps({"app": app}),
-			],
-			log,
-		)
+		try:
+			run(
+				[
+					"bench",
+					"--site",
+					SITE,
+					"execute",
+					app + ".tests.v16_smoke.run",
+					"--kwargs",
+					json.dumps({"app": app}),
+				],
+				log,
+			)
+		except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+			failures.append(app)
+			log.write(f"\nWorkflow failure for {app}: {error}\n")
+			log.flush()
+	if failures:
+		raise AssertionError(f"Workflow failures: {', '.join(failures)}")
 
 
 def check_after_migration(log):

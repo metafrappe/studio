@@ -2,7 +2,7 @@
   "dhl_ecommerce_integration": {
     "repo": "metafrappe/DHL-Cargo-ERPNext",
     "branch": "version-16",
-    "sha": "b35bffb3faebb8378bfb5d6ab179156f982cb24d"
+    "sha": "bf1f022f6e16a0ed6ad75a5996072c5f643d252c"
   },
   "payments_processor": {
     "repo": "metafrappe/payments-processor",
