@@ -33,6 +33,14 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "24.20.0"
+      - name: Restore Python package downloads
+        id: python-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.cache/uv
+            ~/.cache/pip
+          key: cargo-payments-${{ runner.os }}-py314-${{ hashFiles('.github/catalog/requirements.in', '.github/catalog/mail-pins.json') }}
       - name: Install build prerequisites
         run: |
           sudo apt-get update -qq
@@ -67,6 +75,14 @@ jobs:
           redis-server config/redis_queue.conf --daemonize yes
           cp "$GITHUB_WORKSPACE/.github/catalog/smoke.py" apps/frappe/frappe/_catalog_smoke.py
           mariadb --host 127.0.0.1 --port 3306 -u root -pci_root -e "SET GLOBAL character_set_server = 'utf8mb4'; SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+      - name: Save package downloads before application tests
+        if: steps.python-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cache/uv
+            ~/.cache/pip
+          key: ${{ steps.python-cache.outputs.cache-primary-key }}
       - name: Validate cargo and payment apps together on one site
         env:
           UV_CONSTRAINT: ${{ runner.temp }}/cargo-payments-constraints.txt
