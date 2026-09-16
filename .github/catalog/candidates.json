@@ -4,23 +4,29 @@
     "branch": "version-16",
     "sha": "ba500e3a88801900d648da2319a3d91e4d4d0839",
     "app": "ecommerce_integrations",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "ba500e3a88801900d648da2319a3d91e4d4d0839",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/doppio",
     "branch": "version-16",
     "sha": "0ccf3ea87c66cad9ddbe38fe82cf861cf5069422",
     "app": "doppio",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "0ccf3ea87c66cad9ddbe38fe82cf861cf5069422",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/suite",
     "branch": "version-16",
-    "sha": "77670423373a369ac832aa6d7b1e6aab56dec808",
+    "sha": "c687e0e4f75db0573f0b33ef6e6a7dcf76375468",
     "app": "suite",
     "test_modules": [
       "suite.suite_drive.webdav.tests.test_xmlutil"
-    ]
+    ],
+    "validated_sha": "77670423373a369ac832aa6d7b1e6aab56dec808",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/flow_client",
@@ -29,12 +35,14 @@
     "app": "flow",
     "test_modules": [
       "flow.tests.test_ai_model"
-    ]
+    ],
+    "validated_sha": "0211ddf8f9caf4ab47610d9574d4f2a1209b53a9",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/erpnext_expenses",
     "branch": "version-16",
-    "sha": "4356224d36f32f640a6b92f82640eb75461c9b4c",
+    "sha": "7abeacedcceccd4d374a20cf0a1005b6f368e2d4",
     "app": "expenses",
     "test_modules": []
   },
@@ -43,33 +51,41 @@
     "branch": "version-16",
     "sha": "b82da439d944907ff0061d37cca0f95c1d763793",
     "app": "pdf_on_submit",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "b82da439d944907ff0061d37cca0f95c1d763793",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/frappe-attachments-s3",
     "branch": "version-16",
-    "sha": "2eae63a224654a9a51ed664b4a0b1cc06432406d",
+    "sha": "5ccac8c384335dacedf01cb580d1a264c427245e",
     "app": "frappe_s3_attachment",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "2eae63a224654a9a51ed664b4a0b1cc06432406d",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/frappe-attachments-s3",
     "branch": "version-16-improwised",
-    "sha": "579d0a861cb22ab996ee0dffac85771349f8c81f",
+    "sha": "260c5841da5689116fe6fb664ae9b2f5682bab2a",
     "app": "frappe_s3_improwised",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "579d0a861cb22ab996ee0dffac85771349f8c81f",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/frappe-oidc-extended",
     "branch": "version-16",
-    "sha": "89901d0d4406d1981301b2670c3b6d94e5e0c574",
+    "sha": "8815706eb236c6257c7f4fa1a0fe8c53a4a07e69",
     "app": "oidc_extended",
-    "test_modules": []
+    "test_modules": [],
+    "validated_sha": "89901d0d4406d1981301b2670c3b6d94e5e0c574",
+    "validation_run": "https://github.com/metafrappe/studio/actions/runs/35067763027"
   },
   {
     "repo": "metafrappe/nextassist",
     "branch": "version-16",
-    "sha": "f9a37aabf0ab0de59ef93e57b769a96696c8c619",
+    "sha": "83e7692dc15b0f300a17bf4d466be7e49613e2b4",
     "app": "nextassist",
     "test_modules": []
   }

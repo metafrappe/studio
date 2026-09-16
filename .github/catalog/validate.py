@@ -74,7 +74,8 @@ def validate(candidate):
 def main():
     shard = int(sys.argv[1])
     candidates = json.loads((WORKSPACE / ".github/catalog/candidates.json").read_text())
-    candidates = [row for row in candidates if not row.get("deferred")]
+    candidates = [row for row in candidates
+                  if not row.get("deferred") and row.get("validated_sha") != row["sha"]]
     results = [validate(row) for index, row in enumerate(candidates) if index % 4 == shard]
     (OUTPUT / f"shard-{shard}.json").write_text(json.dumps(results, indent=2))
     with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
